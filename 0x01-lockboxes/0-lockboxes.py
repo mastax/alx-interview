@@ -1,6 +1,15 @@
 #!/usr/bin/python3
+"""
+Solution is
+"""
+
 
 def can_unlock_all(boxes):
+    """
+    Determines whether a series of locked boxes can be opened
+    based on keys that can be attained.
+    Solution to the lockboxes problem
+    """
     unlocked = set()  # To keep track of unlocked boxes
     to_unlock = [0]   # Start with box 0, which is unlocked
 
