@@ -3,7 +3,7 @@
     """
 
 
-def minOperations(n: int) -> int:
+def minOperations(n):
     """ Minimum Operations needed to get n H characters """
     next = 'H'
     body = 'H'
