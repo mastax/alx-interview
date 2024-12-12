@@ -7,37 +7,47 @@ def isWinner(x, nums):
     mariaWinsCount = 0
     benWinsCount = 0
 
-    for num in nums:
-        roundsSet = list(range(1, num + 1))
-        primesSet = primes_in_range(1, num)
-
-        if not primesSet:
-            benWinsCount += 1
-            continue
-
-        isMariaTurns = True
-
-        while(True):
-            if not primesSet:
-                if isMariaTurns:
-                    benWinsCount += 1
-                else:
-                    mariaWinsCount += 1
+    for n in nums:
+        # Create set of numbers for the round
+        roundSet = set(range(1, n + 1))
+        
+        # Get list of primes
+        primes = [p for p in range(2, n + 1) if is_prime(p)]
+        
+        # Track whose turn it is
+        playerTurn = 0  # 0 for Maria, 1 for Ben
+        
+        while primes:
+            # Find the smallest prime in the current set
+            valid_primes = [p for p in primes if p in roundSet]
+            
+            if not valid_primes:
                 break
+            
+            # Choose the smallest prime
+            prime = min(valid_primes)
+            
+            # Remove the prime and its multiples
+            roundSet = {x for x in roundSet if x % prime != 0}
+            
+            # Remove the prime from available primes
+            primes.remove(prime)
+            
+            # Switch turns
+            playerTurn = 1 - playerTurn
+        
+        # If no primes left and it was Maria's turn, Ben wins
+        if playerTurn == 0:
+            benWinsCount += 1
+        else:
+            mariaWinsCount += 1
 
-            smallestPrime = primesSet.pop(0)
-            roundsSet.remove(smallestPrime)
-
-            roundsSet = [x for x in roundsSet if x % smallestPrime != 0]
-
-            isMariaTurns = not isMariaTurns
-
+    # Determine overall winner
     if mariaWinsCount > benWinsCount:
-        return "Winner: Maria"
-
-    if mariaWinsCount < benWinsCount:
-        return "Winner: Ben"
-
+        return "Maria"
+    elif benWinsCount > mariaWinsCount:
+        return "Ben"
+    
     return None
 
 
@@ -49,9 +59,3 @@ def is_prime(n):
         if n % i == 0:
             return False
     return True
-
-
-def primes_in_range(start, end):
-    """Returns a list of prime numbers between start and end (inclusive)."""
-    primes = [n for n in range(start, end+1) if is_prime(n)]
-    return primes
